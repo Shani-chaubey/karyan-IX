@@ -121,7 +121,9 @@ export default function Home() {
   const nextPopup = () =>
     changePopupIndex((popupIndex + 1) % popupImages.length);
   const prevPopup = () =>
-    changePopupIndex((popupIndex - 1 + popupImages.length) % popupImages.length);
+    changePopupIndex(
+      (popupIndex - 1 + popupImages.length) % popupImages.length,
+    );
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -297,7 +299,10 @@ export default function Home() {
               <a href="#price">Highlights</a>
             </li>
             <li>
-              <a href="#floor-plan">Location</a>
+              <a href="#location">Location</a>
+            </li>
+            <li>
+              <a href="#floor-plan">Floor Plan</a>
             </li>
             <li>
               <a href="#gallery">Gallery</a>
@@ -553,7 +558,7 @@ export default function Home() {
           </section>
 
           {/* ── LOCATION ── */}
-          <section id="floor-plan" className="location-benefits">
+          <section id="location" className="location-benefits">
             <div className="section-container">
               <span className="section-tag">
                 <i className="fas fa-map-marker-alt"></i> Location Advantage
@@ -600,14 +605,13 @@ export default function Home() {
                       src="/studio-img/2S.jpeg"
                       alt="Location Map"
                       className="blur-image"
-                      style={{ filter: "blur(1px) brightness(0.65)" }}
                     />
                   </div>
                   <button
                     className="btn-primary image-cta-below"
-                    onClick={() => openModal("location", "Get Location")}
+                    onClick={() => openModal("location", "Enquire Now")}
                   >
-                    <i className="fas fa-map-pin"></i> View Location
+                    <i className="fas fa-map-pin"></i> Enquire Now
                   </button>
                 </div>
               </div>
@@ -642,7 +646,21 @@ export default function Home() {
                   </div>
                 ))}
               </div>
-              <div className="blur-placeholder" style={{ maxWidth: "780px" }}>
+            </div>
+          </section>
+
+          {/* ── FLOOR PLAN ── */}
+          <section id="floor-plan" className="floor-plan-section">
+            <div className="section-container">
+              <span className="section-tag">
+                <i className="fas fa-vector-square"></i> Layout
+              </span>
+              <h2 className="section-title">Floor Plan</h2>
+              <p className="section-subtitle">
+                Explore the tower layout — request detailed drawings after your
+                enquiry.
+              </p>
+              <div className="blur-placeholder floor-plan-visual">
                 <img
                   src="/studio-img/6S.jpeg"
                   alt="Floor Plan"
@@ -659,7 +677,7 @@ export default function Home() {
           </section>
 
           {/* ── GALLERY ── */}
-          <section id="gallery" className="gallery">
+          <section id="gallery" className="gallery" style={{ paddingTop: "0" }}>
             <div className="section-container">
               <span className="section-tag">
                 <i className="fas fa-images"></i> Visual Tour
