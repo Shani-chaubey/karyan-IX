@@ -204,7 +204,7 @@ export async function POST(request: NextRequest) {
           <!-- Header -->
           <tr>
             <td style="background:linear-gradient(135deg,#0d1b2a 0%,#1a3050 100%);padding:36px 40px 30px;text-align:center;">
-              <p style="margin:0 0 6px;color:#c6a96a;font-size:11px;letter-spacing:2px;text-transform:uppercase;font-weight:600;">Karyan Infratech Group</p>
+              <p style="margin:0 0 6px;color:#c6a96a;font-size:11px;letter-spacing:2px;text-transform:uppercase;font-weight:600;">Karyan Group</p>
               <h1 style="margin:0;color:#ffffff;font-size:24px;font-weight:700;">Thank You, ${escapeHtml(name)}!</h1>
               <p style="margin:10px 0 0;color:rgba(255,255,255,0.65);font-size:13px;">We have received your enquiry for Karyan Nine.</p>
             </td>
@@ -214,7 +214,7 @@ export async function POST(request: NextRequest) {
           <tr>
             <td style="padding:36px 40px 24px;">
               <p style="margin:0 0 16px;color:#333;font-size:15px;line-height:1.7;">Dear ${escapeHtml(name)},</p>
-              <p style="margin:0 0 16px;color:#555;font-size:14px;line-height:1.8;">Thank you for reaching out to us regarding <strong>Karyan Nine</strong> — our premium studio tower located on the <strong>Delhi-Meerut Expressway</strong>, opposite Wave City, Ghaziabad.</p>
+              <p style="margin:0 0 16px;color:#555;font-size:14px;line-height:1.8;">Thank you for reaching out to us regarding <strong>Karyan Nine</strong> — our premium studio tower located on the <strong>Delhi-Meerut Expressway</strong>, opposite to Wave City, Ghaziabad.</p>
               <p style="margin:0 0 16px;color:#555;font-size:14px;line-height:1.8;">We truly appreciate your interest, and our sales team will contact you shortly to understand your requirements and share detailed information about the project, including pricing, floor plans, and site visit arrangements.</p>
               <p style="margin:0 0 24px;color:#555;font-size:14px;line-height:1.8;">If you have an immediate query, you are welcome to reach us directly using the contact details below.</p>
 
@@ -251,7 +251,7 @@ export async function POST(request: NextRequest) {
           <!-- CTA -->
           <tr>
             <td style="padding:0 40px 36px;text-align:center;">
-              <a href="https://karyan9.in" style="display:inline-block;background:linear-gradient(135deg,#c6a96a,#a8863c);color:#ffffff;text-decoration:none;padding:13px 36px;border-radius:6px;font-size:14px;font-weight:600;letter-spacing:0.4px;">Visit Project Website</a>
+              <a href="https://nine.karyaninfratech.co.in" style="display:inline-block;background:linear-gradient(135deg,#c6a96a,#a8863c);color:#ffffff;text-decoration:none;padding:13px 36px;border-radius:6px;font-size:14px;font-weight:600;letter-spacing:0.4px;">Visit Project Website</a>
             </td>
           </tr>
 
