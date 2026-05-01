@@ -368,7 +368,7 @@ export default function Home() {
                         <i className="fas fa-gem feature-icon-fa"></i>
                         <span className="feature-label">Inventory</span>
                         <span className="feature-value">
-                          25 Exclusive Units on a Per Floor
+                          Exclusive 25 Units Per floor
                         </span>
                       </div>
                       <div className="feature">
@@ -445,7 +445,7 @@ export default function Home() {
                     access and a premium address.
                   </p>
                   <p className="overview-para">
-                    With 25 units on a per floor in a 12-floor tower, every
+                    With premium 25 units per floor in a 12-floor tower, every
                     space is planned for comfort, convenience and better value.
                     Limited inventory and iconic frontage make it a smart
                     investment for years to come.
@@ -457,12 +457,7 @@ export default function Home() {
                     >
                       <i className="fas fa-paper-plane"></i> Enquire Now
                     </button>
-                    <button
-                      className="btn-primary btn-download-brochure"
-                      onClick={() => openModal("brochure", "Download Brochure")}
-                    >
-                      <i className="fas fa-download"></i> Download Brochure
-                    </button>
+                    
                   </div>
                 </div>
                 <div className="overview-stats">
@@ -778,12 +773,7 @@ export default function Home() {
                 >
                   <i className="fas fa-paper-plane"></i> Enquire Now
                 </button>
-                <button
-                  className="btn-white btn-download-brochure"
-                  onClick={() => openModal("brochure", "Download Brochure")}
-                >
-                  <i className="fas fa-download"></i> Download Brochure
-                </button>
+                
                 <a className="btn-outline-white" href="tel:+919953298484">
                   <i className="fas fa-phone-alt"></i> Call Now
                 </a>
