@@ -814,7 +814,7 @@ export default function Home() {
               </p>
               <div className="blur-placeholder" style={{ marginTop: "3rem" }}>
                 <img
-                  src="/studio-img/3S.jpeg"
+                  src="/images/location.jpeg"
                   alt="Location"
                   className="blur-image"
                 />
