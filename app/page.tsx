@@ -402,8 +402,8 @@ export default function Home() {
                       <span className="banner-price-label">Starting Price</span>
                       <span className="banner-price-main">
                         ₹65 Lacs<sup>*</sup>
+                        <span className="banner-price-onwards">Onwards</span>
                       </span>
-                      <span className="banner-price-onwards">Onwards</span>
                     </p>
                   </div>
                 </div>
