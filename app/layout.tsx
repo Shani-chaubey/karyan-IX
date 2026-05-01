@@ -6,7 +6,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Karyan IX",
   description:
-    "Iconic Luxury Studio Tower Opposite Wave City on the Delhi-Meerut Expressway.",
+    "Iconic Luxury Studio Tower opposite to Wave City on the Delhi-Meerut Expressway.",
   verification: {
     google: "A5JRIHzRM3NzKt9Gme0mjTnu7zxP9OGtWyJbnDakWAo",
   },

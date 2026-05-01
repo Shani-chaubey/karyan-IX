@@ -78,7 +78,8 @@ export default function Home() {
     setFormSubmitSource(source);
     setModalTitle(TITLE_MAP[source] || "Book a free site visit");
     setModalSubmitLabel(
-      submitLabel || (source === "brochure" ? "Download Brochure" : "Book Site Visit")
+      submitLabel ||
+        (source === "brochure" ? "Download Brochure" : "Book Site Visit"),
     );
     setModalOpen(true);
     document.body.style.overflow = "hidden";
@@ -90,7 +91,9 @@ export default function Home() {
 
   /* ─ Gallery popup ─ */
   const [popupOpen, setPopupOpen] = useState(false);
-  const [popupImages, setPopupImages] = useState<{ src: string; alt: string }[]>([]);
+  const [popupImages, setPopupImages] = useState<
+    { src: string; alt: string }[]
+  >([]);
   const [popupIndex, setPopupIndex] = useState(0);
 
   const openPopup = (images: { src: string; alt: string }[], index: number) => {
@@ -103,8 +106,7 @@ export default function Home() {
     setPopupOpen(false);
     document.body.style.overflow = "";
   };
-  const nextPopup = () =>
-    setPopupIndex((p) => (p + 1) % popupImages.length);
+  const nextPopup = () => setPopupIndex((p) => (p + 1) % popupImages.length);
   const prevPopup = () =>
     setPopupIndex((p) => (p - 1 + popupImages.length) % popupImages.length);
 
@@ -233,11 +235,11 @@ export default function Home() {
           }
         });
       },
-      { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }
+      { threshold: 0.1, rootMargin: "0px 0px -50px 0px" },
     );
     document
       .querySelectorAll(
-        ".section-title, .price-card, .gallery-item, .stat-item, .contact-item"
+        ".section-title, .price-card, .gallery-item, .stat-item, .contact-item",
       )
       .forEach((el) => {
         (el as HTMLElement).style.opacity = "0";
@@ -251,7 +253,12 @@ export default function Home() {
   return (
     <>
       {submitOverlay && (
-        <div className="form-submit-overlay" role="status" aria-live="polite" aria-busy="true">
+        <div
+          className="form-submit-overlay"
+          role="status"
+          aria-live="polite"
+          aria-busy="true"
+        >
           <div className="form-submit-backdrop" />
           <div className="form-submit-card">
             <div className="form-submit-spinner" aria-hidden>
@@ -273,11 +280,21 @@ export default function Home() {
             <img src="/images/logo.png" alt="Karyan IX" />
           </div>
           <ul className={`nav-links${menuOpen ? " active" : ""}`}>
-            <li><a href="#price">Highlights</a></li>
-            <li><a href="#floor-plan">Location</a></li>
-            <li><a href="#gallery">Gallery</a></li>
-            <li><a href="#virtual-tour">Why Invest</a></li>
-            <li><a href="#location">Contact</a></li>
+            <li>
+              <a href="#price">Highlights</a>
+            </li>
+            <li>
+              <a href="#floor-plan">Location</a>
+            </li>
+            <li>
+              <a href="#gallery">Gallery</a>
+            </li>
+            <li>
+              <a href="#virtual-tour">Why Invest</a>
+            </li>
+            <li>
+              <a href="#location">Contact</a>
+            </li>
             <li>
               <button
                 className="btn-download-brochure"
@@ -303,21 +320,26 @@ export default function Home() {
       <div className="main-container">
         {/* ─ MAIN CONTENT ─ */}
         <main className="main-content">
-
           {/* ── HERO ── */}
           <section className="banner">
             <div
               className="slider"
-              onTouchStart={(e) => { touchStartX.current = e.changedTouches[0].screenX; }}
+              onTouchStart={(e) => {
+                touchStartX.current = e.changedTouches[0].screenX;
+              }}
               onTouchEnd={(e) => {
                 const diff = touchStartX.current - e.changedTouches[0].screenX;
                 if (Math.abs(diff) > 50) diff > 0 ? nextSlide() : prevSlide();
               }}
             >
               {SLIDES.map((slide, i) => (
-                <div key={i} className={`slide${currentSlide === i ? " active" : ""}`}>
+                <div
+                  key={i}
+                  className={`slide${currentSlide === i ? " active" : ""}`}
+                >
                   <div className="rera-badge">
-                    <i className="fas fa-shield-alt"></i> Premium Commercial Tower
+                    <i className="fas fa-shield-alt"></i> Premium Commercial
+                    Tower
                   </div>
                   <img
                     src={slide.src}
@@ -328,9 +350,10 @@ export default function Home() {
                     <div className="info-badge">
                       <i className="fas fa-star"></i> Karyan IX
                     </div>
-                    <h1>Iconic Luxury Studio Tower Opposite Wave City</h1>
+                    <h1>Iconic Luxury Studio Tower opposite to Wave City</h1>
                     <p className="banner-expressway-line">
-                      <i className="fas fa-road"></i> On the Delhi-Meerut Expressway
+                      <i className="fas fa-road"></i> On the Delhi-Meerut
+                      Expressway
                     </p>
                     <p className="location">
                       <i className="fas fa-map-marker-alt"></i> Premium Studio
@@ -346,7 +369,9 @@ export default function Home() {
                       <div className="feature">
                         <i className="fas fa-gem feature-icon-fa"></i>
                         <span className="feature-label">Inventory</span>
-                        <span className="feature-value">25 Exclusive Units on a Per Floor</span>
+                        <span className="feature-value">
+                          25 Exclusive Units on a Per Floor
+                        </span>
                       </div>
                       <div className="feature">
                         <i className="fas fa-th-large feature-icon-fa"></i>
@@ -356,7 +381,9 @@ export default function Home() {
                       <div className="feature">
                         <i className="fas fa-arrow-up feature-icon-fa"></i>
                         <span className="feature-label">Lifts</span>
-                        <span className="feature-value">6 Dedicated High-Speed Lifts</span>
+                        <span className="feature-value">
+                          6 Dedicated High-Speed Lifts
+                        </span>
                       </div>
                     </div>
                     <p className="banner-price-heading">
@@ -370,10 +397,18 @@ export default function Home() {
                 </div>
               ))}
 
-              <button className="slider-btn prev" onClick={prevSlide} aria-label="Previous slide">
+              <button
+                className="slider-btn prev"
+                onClick={prevSlide}
+                aria-label="Previous slide"
+              >
                 <i className="fas fa-chevron-left"></i>
               </button>
-              <button className="slider-btn next" onClick={nextSlide} aria-label="Next slide">
+              <button
+                className="slider-btn next"
+                onClick={nextSlide}
+                aria-label="Next slide"
+              >
                 <i className="fas fa-chevron-right"></i>
               </button>
 
@@ -382,7 +417,10 @@ export default function Home() {
                   <span
                     key={i}
                     className={`dot${currentSlide === i ? " active" : ""}`}
-                    onClick={() => { setCurrentSlide(i); startAutoPlay(); }}
+                    onClick={() => {
+                      setCurrentSlide(i);
+                      startAutoPlay();
+                    }}
                   />
                 ))}
               </div>
@@ -397,22 +435,22 @@ export default function Home() {
               </span>
               <h2 className="section-title">
                 A new landmark on the Delhi-Meerut Expressway. Strategically
-                located opposite Wave City
+                located opposite to Wave City
               </h2>
               <div className="overview-content">
                 <div className="overview-text">
                   <p className="section-subtitle">
                     Karyan IX is a premium studio tower designed for modern
-                    investors, business owners and future-focused buyers. Located
-                    right on Delhi-Meerut Expressway and opposite Wave City, this
-                    project offers strong visibility, easy access and a premium
-                    address.
+                    investors, business owners and future-focused buyers.
+                    Located right on Delhi-Meerut Expressway and opposite to
+                    Wave City, this project offers strong visibility, easy
+                    access and a premium address.
                   </p>
                   <p className="overview-para">
-                    With 25 units on a per floor in a 12-floor tower, every space
-                    is planned for comfort, convenience and better value. Limited
-                    inventory and iconic frontage make it a smart investment for
-                    years to come.
+                    With 25 units on a per floor in a 12-floor tower, every
+                    space is planned for comfort, convenience and better value.
+                    Limited inventory and iconic frontage make it a smart
+                    investment for years to come.
                   </p>
                   <div className="about-cta-row">
                     <button
@@ -431,24 +469,34 @@ export default function Home() {
                 </div>
                 <div className="overview-stats">
                   <div className="stat-item">
-                    <div className="stat-icon-wrap"><i className="fas fa-road"></i></div>
+                    <div className="stat-icon-wrap">
+                      <i className="fas fa-road"></i>
+                    </div>
                     <div>
                       <div className="stat-label">Location</div>
-                      <div className="stat-number">Right on the Delhi-Meerut Expressway</div>
+                      <div className="stat-number">
+                        Right on the Delhi-Meerut Expressway
+                      </div>
                     </div>
                   </div>
                   <div className="stat-item">
-                    <div className="stat-icon-wrap"><i className="fas fa-gem"></i></div>
+                    <div className="stat-icon-wrap">
+                      <i className="fas fa-gem"></i>
+                    </div>
                     <div>
                       <div className="stat-label">Exclusivity</div>
-                      <div className="stat-number">25 Premium Units on a per floor</div>
+                      <div className="stat-number">
+                        25 Premium Units on a per floor
+                      </div>
                     </div>
                   </div>
                   <div className="stat-item">
-                    <div className="stat-icon-wrap"><i className="fas fa-city"></i></div>
+                    <div className="stat-icon-wrap">
+                      <i className="fas fa-city"></i>
+                    </div>
                     <div>
                       <div className="stat-label">Neighbours</div>
-                      <div className="stat-number">Opposite Wave City</div>
+                      <div className="stat-number">opposite to Wave City</div>
                     </div>
                   </div>
                 </div>
@@ -466,14 +514,26 @@ export default function Home() {
               <div className="highlights-grid">
                 {[
                   { icon: "fa-building", text: "Iconic Studio Luxury Tower" },
-                  { icon: "fa-layer-group", text: "12 Floors Premium Development" },
+                  {
+                    icon: "fa-layer-group",
+                    text: "12 Floors Premium Development",
+                  },
                   { icon: "fa-gem", text: "Only 25 Units in per floor" },
-                  { icon: "fa-border-all", text: "Full Glass Facade Elevation" },
+                  {
+                    icon: "fa-border-all",
+                    text: "Full Glass Facade Elevation",
+                  },
                   { icon: "fa-compass", text: "Vastu-Compliant" },
-                  { icon: "fa-sort-amount-up", text: "6 Dedicated High-Speed Lifts" },
+                  {
+                    icon: "fa-sort-amount-up",
+                    text: "6 Dedicated High-Speed Lifts",
+                  },
                   { icon: "fa-ruler-combined", text: "6 ft. wide corridors" },
                   { icon: "fa-concierge-bell", text: "Premium Entry Lobby" },
-                  { icon: "fa-binoculars", text: "High Visibility from Highway" },
+                  {
+                    icon: "fa-binoculars",
+                    text: "High Visibility from Highway",
+                  },
                   { icon: "fa-landmark", text: "Modern Architecture" },
                 ].map((item) => (
                   <div className="highlight-card" key={item.text}>
@@ -497,14 +557,36 @@ export default function Home() {
               <div className="location-benefits-inner">
                 <div>
                   <ul className="loc-list">
-                    <li><i className="fas fa-road"></i>Nearby Ganga Expressway &amp; Eastern Peripheral Expressway</li>
-                    <li><i className="fas fa-city"></i>Just Opposite Wave City</li>
-                    <li><i className="fas fa-hospital"></i>Manipal Hospital – 1.5 KM</li>
-                    <li><i className="fas fa-hospital-alt"></i>Metro Station ~ 15 Minutes</li>
-                    <li><i className="fas fa-graduation-cap"></i>IMS College – 10 Minutes</li>
-                    <li><i className="fas fa-graduation-cap"></i>ABES College – 5 Minutes</li>
-                    <li><i className="fas fa-store"></i>Near Expo Center</li>
-                    <li><i className="fas fa-network-wired"></i>Easy Connectivity to Noida, Delhi &amp; Ghaziabad</li>
+                    <li>
+                      <i className="fas fa-road"></i>Nearby Ganga Expressway
+                      &amp; Eastern Peripheral Expressway
+                    </li>
+                    <li>
+                      <i className="fas fa-city"></i>Just opposite to Wave City
+                    </li>
+                    <li>
+                      <i className="fas fa-hospital"></i>Manipal Hospital – 1.5
+                      KM
+                    </li>
+                    <li>
+                      <i className="fas fa-hospital-alt"></i>Metro Station ~ 15
+                      Minutes
+                    </li>
+                    <li>
+                      <i className="fas fa-graduation-cap"></i>IMS College – 10
+                      Minutes
+                    </li>
+                    <li>
+                      <i className="fas fa-graduation-cap"></i>ABES College – 5
+                      Minutes
+                    </li>
+                    <li>
+                      <i className="fas fa-store"></i>Near Expo Center
+                    </li>
+                    <li>
+                      <i className="fas fa-network-wired"></i>Easy Connectivity
+                      to Noida, Delhi &amp; Ghaziabad
+                    </li>
                   </ul>
                 </div>
                 <div className="location-visual-pane">
@@ -541,17 +623,26 @@ export default function Home() {
                   { icon: "fa-video", name: "CCTV Surveillance" },
                   { icon: "fa-car", name: "Ample Parking Space" },
                   { icon: "fa-border-none", name: "Premium Glass Facade" },
-                  { icon: "fa-door-open", name: "Grand Double-Height Entrance" },
+                  {
+                    icon: "fa-door-open",
+                    name: "Grand Double-Height Entrance",
+                  },
                   { icon: "fa-trophy", name: "Branded Commercial Ambience" },
                 ].map((a) => (
                   <div className="amenity-card" key={a.name}>
-                    <div className="amenity-icon"><i className={`fas ${a.icon}`}></i></div>
+                    <div className="amenity-icon">
+                      <i className={`fas ${a.icon}`}></i>
+                    </div>
                     <div className="amenity-name">{a.name}</div>
                   </div>
                 ))}
               </div>
               <div className="blur-placeholder" style={{ maxWidth: "780px" }}>
-                <img src="/studio-img/6S.jpeg" alt="Floor Plan" className="blur-image" />
+                <img
+                  src="/studio-img/6S.jpeg"
+                  alt="Floor Plan"
+                  className="blur-image"
+                />
               </div>
               <button
                 className="btn-primary image-cta-below"
@@ -580,7 +671,11 @@ export default function Home() {
                     key={i}
                     onClick={() => openPopup(GALLERY_IMAGES, i)}
                   >
-                    <img src={img.src} alt={img.alt} className="gallery-popup-img" />
+                    <img
+                      src={img.src}
+                      alt={img.alt}
+                      className="gallery-popup-img"
+                    />
                   </div>
                 ))}
               </div>
@@ -597,10 +692,10 @@ export default function Home() {
                   </span>
                   <h2 className="section-title">Why Choose Karyan IX</h2>
                   <p>
-                    This project is built at one of the fastest growing locations
-                    of Ghaziabad. With direct highway access, nearby hospitals,
-                    colleges and residential catchment, it gives strong business
-                    potential and future appreciation.
+                    This project is built at one of the fastest growing
+                    locations of Ghaziabad. With direct highway access, nearby
+                    hospitals, colleges and residential catchment, it gives
+                    strong business potential and future appreciation.
                   </p>
                   <p>
                     Limited inventory and iconic frontage make it a smart
@@ -608,24 +703,39 @@ export default function Home() {
                   </p>
                   <div className="invest-points">
                     <div className="invest-point">
-                      <div className="invest-point-icon"><i className="fas fa-route"></i></div>
+                      <div className="invest-point-icon">
+                        <i className="fas fa-route"></i>
+                      </div>
                       <div>
                         <strong>Connected to Everything</strong>
-                        <p>Smooth highway access to Noida, Delhi &amp; Ghaziabad — every important destination is minutes away.</p>
+                        <p>
+                          Smooth highway access to Noida, Delhi &amp; Ghaziabad
+                          — every important destination is minutes away.
+                        </p>
                       </div>
                     </div>
                     <div className="invest-point">
-                      <div className="invest-point-icon"><i className="fas fa-hand-holding-usd"></i></div>
+                      <div className="invest-point-icon">
+                        <i className="fas fa-hand-holding-usd"></i>
+                      </div>
                       <div>
                         <strong>High ROI Potential</strong>
-                        <p>Prime highway frontage + limited supply = strong appreciation and rental yield over time.</p>
+                        <p>
+                          Prime highway frontage + limited supply = strong
+                          appreciation and rental yield over time.
+                        </p>
                       </div>
                     </div>
                     <div className="invest-point">
-                      <div className="invest-point-icon"><i className="fas fa-users"></i></div>
+                      <div className="invest-point-icon">
+                        <i className="fas fa-users"></i>
+                      </div>
                       <div>
                         <strong>Large Catchment Area</strong>
-                        <p>Hospitals, colleges, residential zones and tech parks all within 5–10 minutes radius.</p>
+                        <p>
+                          Hospitals, colleges, residential zones and tech parks
+                          all within 5–10 minutes radius.
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -649,18 +759,25 @@ export default function Home() {
           <section id="location" className="cta-section">
             <div className="section-container">
               <h2 className="section-title center">
-                Book Your Studio Space on the Delhi-Meerut Expressway, Opposite Wave City
+                Book Your Studio Space on the Delhi-Meerut Expressway, opposite
+                to Wave City
               </h2>
               <p className="cta-subtitle">
                 <span style={{ display: "block" }}>
-                  <span className="prelaunch-highlight">Get Pre-Launch Benefit for 50 Units</span>
+                  <span className="prelaunch-highlight">
+                    Get Pre-Launch Benefit for 50 Units
+                  </span>
                 </span>
                 <span style={{ display: "block" }}>
-                  Connect with our team today for pricing, floor plan and site visit.
+                  Connect with our team today for pricing, floor plan and site
+                  visit.
                 </span>
               </p>
               <div className="cta-buttons">
-                <button className="btn-white" onClick={() => openModal("site-visit", "Enquire Now")}>
+                <button
+                  className="btn-white"
+                  onClick={() => openModal("site-visit", "Enquire Now")}
+                >
                   <i className="fas fa-paper-plane"></i> Enquire Now
                 </button>
                 <button
@@ -677,7 +794,11 @@ export default function Home() {
                 Karyan IX — Premium Studio Landmark on Delhi-Meerut Expressway
               </p>
               <div className="blur-placeholder" style={{ marginTop: "3rem" }}>
-                <img src="/studio-img/3S.jpeg" alt="Location" className="blur-image" />
+                <img
+                  src="/studio-img/3S.jpeg"
+                  alt="Location"
+                  className="blur-image"
+                />
               </div>
               <button
                 className="btn-white image-cta-below"
@@ -692,13 +813,22 @@ export default function Home() {
         {/* ─ LEAD FORM ─ */}
         <aside className="lead-form">
           <div className="form-container">
-            <div className="form-header-icon"><i className="fas fa-building"></i></div>
+            <div className="form-header-icon">
+              <i className="fas fa-building"></i>
+            </div>
             <h2 className="anim">Book a Site Visit</h2>
-            <p className="anim2"><i className="fas fa-phone-alt"></i> +91 995-329-8484</p>
+            <p className="anim2">
+              <i className="fas fa-phone-alt"></i> +91 995-329-8484
+            </p>
             <form id="leadForm" onSubmit={handleLeadSubmit}>
               <div className="form-icon-group">
                 <i className="fas fa-user"></i>
-                <input type="text" name="name" placeholder="Your Full Name" required />
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Your Full Name"
+                  required
+                />
               </div>
               <div className="form-icon-group">
                 <i className="fas fa-mobile-alt"></i>
@@ -720,9 +850,18 @@ export default function Home() {
               </div>
               <div className="form-icon-group">
                 <i className="fas fa-envelope"></i>
-                <input type="email" name="email" placeholder="Email Address" required />
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email Address"
+                  required
+                />
               </div>
-              <button type="submit" className="btn-submit" disabled={!!submitOverlay}>
+              <button
+                type="submit"
+                className="btn-submit"
+                disabled={!!submitOverlay}
+              >
                 <i className="fas fa-paper-plane"></i> {LEAD_BUTTON_LABEL}
               </button>
             </form>
@@ -746,17 +885,18 @@ export default function Home() {
               renowned entities.
             </p>
             <p>
-              With an unwavering dedication to innovation and sustainability, the
-              company consistently delivers developments that redefine industry
-              benchmarks. Guided by principles of integrity and transparency,
-              Karyan Group not only meets but surpasses expectations, cultivating
-              enduring trust and confidence among its stakeholders.
+              With an unwavering dedication to innovation and sustainability,
+              the company consistently delivers developments that redefine
+              industry benchmarks. Guided by principles of integrity and
+              transparency, Karyan Group not only meets but surpasses
+              expectations, cultivating enduring trust and confidence among its
+              stakeholders.
             </p>
             <p>
-              Through visionary leadership and a steadfast pursuit of excellence,
-              the company continues to shape the future of real estate,
-              reinforcing its position as a trusted and forward-thinking industry
-              leader.
+              Through visionary leadership and a steadfast pursuit of
+              excellence, the company continues to shape the future of real
+              estate, reinforcing its position as a trusted and forward-thinking
+              industry leader.
             </p>
           </div>
           <br />
@@ -764,16 +904,29 @@ export default function Home() {
             <h2 className="contact-title">CONTACT DETAILS</h2>
             <div className="contact-info">
               <div className="contact-item">
-                <span className="label"><i className="fas fa-map-marker-alt"></i> Address</span>
-                <span className="value">Karyan IX, Delhi Meerut Expressway, Ghaziabad</span>
+                <span className="label">
+                  <i className="fas fa-map-marker-alt"></i> Address
+                </span>
+                <span className="value">
+                  Karyan IX, Delhi Meerut Expressway, Ghaziabad
+                </span>
               </div>
               <div className="contact-item">
-                <span className="label"><i className="fas fa-phone-alt"></i> Phone</span>
-                <a href="tel:+919953298484" className="value phone-link">+91 995-329-8484</a>
+                <span className="label">
+                  <i className="fas fa-phone-alt"></i> Phone
+                </span>
+                <a href="tel:+919953298484" className="value phone-link">
+                  +91 995-329-8484
+                </a>
               </div>
               <div className="contact-item">
-                <span className="label"><i className="fas fa-envelope"></i> Email</span>
-                <a href="mailto:sales@karyaninfratech.co.in" className="value email-link">
+                <span className="label">
+                  <i className="fas fa-envelope"></i> Email
+                </span>
+                <a
+                  href="mailto:sales@karyaninfratech.co.in"
+                  className="value email-link"
+                >
                   sales@karyaninfratech.co.in
                 </a>
               </div>
@@ -784,12 +937,13 @@ export default function Home() {
             <p className="disclaimer-text">
               For Photos, Layouts and Maps – The Pictures and details are
               tentative depictions only. This is not a legal offer. Mentioned
-              features are indicative and are subject to change without any prior
-              notice as may be decided by the company or competent authority Terms
-              and Conditions Apply. Special Scheme by the developer.1sq Mtr
-              =10.764 Sq. Ft &amp; 1sq. Yd. = 9 Sq. feet. This is not the official
-              website of developer &amp; property, it belongs to authorised channel
-              partner for information purpose only.
+              features are indicative and are subject to change without any
+              prior notice as may be decided by the company or competent
+              authority Terms and Conditions Apply. Special Scheme by the
+              developer.1sq Mtr =10.764 Sq. Ft &amp; 1sq. Yd. = 9 Sq. feet. This
+              is not the official website of developer &amp; property, it
+              belongs to authorised channel partner for information purpose
+              only.
             </p>
           </div>
           <div className="sys">
@@ -811,19 +965,33 @@ export default function Home() {
       {/* ─ MODAL ─ */}
       <div
         className={`modal${modalOpen ? " open" : ""}`}
-        onClick={(e) => { if (e.target === e.currentTarget) closeModal(); }}
+        onClick={(e) => {
+          if (e.target === e.currentTarget) closeModal();
+        }}
       >
         <div className="modal-content">
-          <button className="close-modal" onClick={closeModal}>&times;</button>
+          <button className="close-modal" onClick={closeModal}>
+            &times;
+          </button>
           <h2>{modalTitle}</h2>
           <form className="modal-form" onSubmit={handleModalSubmit}>
             <div className="form-icon-group">
               <i className="fas fa-user"></i>
-              <input type="text" name="name" placeholder="Your Full Name" required />
+              <input
+                type="text"
+                name="name"
+                placeholder="Your Full Name"
+                required
+              />
             </div>
             <div className="form-icon-group">
               <i className="fas fa-envelope"></i>
-              <input type="email" name="email" placeholder="Email Address" required />
+              <input
+                type="email"
+                name="email"
+                placeholder="Email Address"
+                required
+              />
             </div>
             <div className="form-icon-group">
               <i className="fas fa-mobile-alt"></i>
@@ -843,7 +1011,11 @@ export default function Home() {
                 }}
               />
             </div>
-            <button type="submit" className="btn-submit" disabled={!!submitOverlay}>
+            <button
+              type="submit"
+              className="btn-submit"
+              disabled={!!submitOverlay}
+            >
               <i className="fas fa-paper-plane"></i> {modalSubmitLabel}
             </button>
           </form>
@@ -853,10 +1025,14 @@ export default function Home() {
       {/* ─ IMAGE POPUP ─ */}
       <div
         className={`image-popup${popupOpen ? " open" : ""}`}
-        onClick={(e) => { if (e.target === e.currentTarget) closePopup(); }}
+        onClick={(e) => {
+          if (e.target === e.currentTarget) closePopup();
+        }}
       >
         <div className="popup-content">
-          <button className="close-popup" onClick={closePopup}>&times;</button>
+          <button className="close-popup" onClick={closePopup}>
+            &times;
+          </button>
           {currentPopup && (
             <img
               id="popupImage"
@@ -866,12 +1042,16 @@ export default function Home() {
           )}
           {popupImages.length > 1 && (
             <div className="popup-nav">
-              <button className="popup-nav-btn" onClick={prevPopup}>&#10094;</button>
-              <button className="popup-nav-btn" onClick={nextPopup}>&#10095;</button>
+              <button className="popup-nav-btn" onClick={prevPopup}>
+                &#10094;
+              </button>
+              <button className="popup-nav-btn" onClick={nextPopup}>
+                &#10095;
+              </button>
             </div>
           )}
         </div>
-    </div>
+      </div>
     </>
   );
 }
