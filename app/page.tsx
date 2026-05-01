@@ -507,21 +507,21 @@ export default function Home() {
               <div className="highlights-grid">
                 {[
                   { icon: "fa-building", text: "Iconic Studio Luxury Tower" },
+                  { icon: "fa-gem", text: "Only 25 Units in per floor" },
+                  { icon: "fa-compass", text: "Vastu-Compliant" },
+                  { icon: "fa-ruler-combined", text: "6 ft. wide corridors" },
                   {
                     icon: "fa-layer-group",
                     text: "12 Floors Premium Development",
                   },
-                  { icon: "fa-gem", text: "Only 25 Units in per floor" },
                   {
                     icon: "fa-border-all",
                     text: "Full Glass Facade Elevation",
                   },
-                  { icon: "fa-compass", text: "Vastu-Compliant" },
                   {
                     icon: "fa-sort-amount-up",
                     text: "6 Dedicated High-Speed Lifts",
                   },
-                  { icon: "fa-ruler-combined", text: "6 ft. wide corridors" },
                   { icon: "fa-concierge-bell", text: "Premium Entry Lobby" },
                   {
                     icon: "fa-binoculars",
