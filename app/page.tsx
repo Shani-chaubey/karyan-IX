@@ -355,10 +355,6 @@ export default function Home() {
                   key={i}
                   className={`slide${currentSlide === i ? " active" : ""}`}
                 >
-                  <div className="rera-badge">
-                    <i className="fas fa-shield-alt"></i> Premium Commercial
-                    Tower
-                  </div>
                   <img
                     src={slide.src}
                     alt="Karyan Nine"
