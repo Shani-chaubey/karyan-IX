@@ -95,10 +95,13 @@ export default function Home() {
     { src: string; alt: string }[]
   >([]);
   const [popupIndex, setPopupIndex] = useState(0);
+  const [popupFading, setPopupFading] = useState(false);
+  const popupTouchStartX = useRef(0);
 
   const openPopup = (images: { src: string; alt: string }[], index: number) => {
     setPopupImages(images);
     setPopupIndex(index);
+    setPopupFading(false);
     setPopupOpen(true);
     document.body.style.overflow = "hidden";
   };
@@ -106,9 +109,19 @@ export default function Home() {
     setPopupOpen(false);
     document.body.style.overflow = "";
   };
-  const nextPopup = () => setPopupIndex((p) => (p + 1) % popupImages.length);
+
+  const changePopupIndex = (next: number) => {
+    setPopupFading(true);
+    setTimeout(() => {
+      setPopupIndex(next);
+      setPopupFading(false);
+    }, 180);
+  };
+
+  const nextPopup = () =>
+    changePopupIndex((popupIndex + 1) % popupImages.length);
   const prevPopup = () =>
-    setPopupIndex((p) => (p - 1 + popupImages.length) % popupImages.length);
+    changePopupIndex((popupIndex - 1 + popupImages.length) % popupImages.length);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -188,8 +201,8 @@ export default function Home() {
         document.body.style.overflow = "";
         if (src === "brochure") {
           const link = document.createElement("a");
-          link.href = "/images/kcB.pdf";
-          link.download = "Karyan_Heights_Brochure.pdf";
+          link.href = "/images/Trevana.pdf";
+          link.download = "Trevana_Brochure.pdf";
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);
@@ -457,7 +470,6 @@ export default function Home() {
                     >
                       <i className="fas fa-paper-plane"></i> Enquire Now
                     </button>
-                    
                   </div>
                 </div>
                 <div className="overview-stats">
@@ -516,7 +528,7 @@ export default function Home() {
                   },
                   {
                     icon: "fa-border-all",
-                    text: "Full Glass Facade Elevation",
+                    text: "Iconic Modern Facade Elevation",
                   },
                   {
                     icon: "fa-sort-amount-up",
@@ -525,7 +537,7 @@ export default function Home() {
                   { icon: "fa-concierge-bell", text: "Premium Entry Lobby" },
                   {
                     icon: "fa-binoculars",
-                    text: "High Visibility from Highway",
+                    text: "Full Visibility from Highway",
                   },
                   { icon: "fa-landmark", text: "Modern Architecture" },
                 ].map((item) => (
@@ -615,7 +627,7 @@ export default function Home() {
                   { icon: "fa-bolt", name: "100% Power Backup" },
                   { icon: "fa-video", name: "CCTV Surveillance" },
                   { icon: "fa-car", name: "Ample Parking Space" },
-                  { icon: "fa-border-none", name: "Premium Glass Facade" },
+                  { icon: "fa-border-none", name: "Iconic Modern Facade" },
                   {
                     icon: "fa-door-open",
                     name: "Grand Double-Height Entrance",
@@ -639,9 +651,9 @@ export default function Home() {
               </div>
               <button
                 className="btn-primary image-cta-below"
-                onClick={() => openModal("floor-plan", "Get Floor Plan")}
+                onClick={() => openModal("floor-plan", "Enquire Now")}
               >
-                <i className="fas fa-file-alt"></i> Get Floor Plan
+                <i className="fas fa-file-alt"></i> Enquire Now
               </button>
             </div>
           </section>
@@ -686,9 +698,10 @@ export default function Home() {
                   <h2 className="section-title">Why Choose Karyan Nine</h2>
                   <p>
                     This project is built at one of the fastest growing
-                    locations of Ghaziabad. With direct highway access, nearby
-                    hospitals, colleges and residential catchment, it gives
-                    strong business potential and future appreciation.
+                    locations of Ghaziabad. Directly accessible from
+                    Delhi-Meerut Expressway, nearby hospitals, colleges and
+                    residential catchment, it gives strong business potential
+                    and future appreciation.
                   </p>
                   <p>
                     Limited inventory and iconic frontage make it a smart
@@ -773,7 +786,7 @@ export default function Home() {
                 >
                   <i className="fas fa-paper-plane"></i> Enquire Now
                 </button>
-                
+
                 <a className="btn-outline-white" href="tel:+919953298484">
                   <i className="fas fa-phone-alt"></i> Call Now
                 </a>
@@ -790,9 +803,9 @@ export default function Home() {
               </div>
               <button
                 className="btn-white image-cta-below"
-                onClick={() => openModal("location-details", "Get Location")}
+                onClick={() => openModal("location-details", "Enquire Now")}
               >
-                <i className="fas fa-map-pin"></i> Get Location Details
+                <i className="fas fa-map-pin"></i> Enquire Now
               </button>
             </div>
           </section>
@@ -1017,25 +1030,73 @@ export default function Home() {
           if (e.target === e.currentTarget) closePopup();
         }}
       >
-        <div className="popup-content">
-          <button className="close-popup" onClick={closePopup}>
-            &times;
+        <div
+          className="popup-content"
+          onTouchStart={(e) => {
+            popupTouchStartX.current = e.changedTouches[0].screenX;
+          }}
+          onTouchEnd={(e) => {
+            const diff = popupTouchStartX.current - e.changedTouches[0].screenX;
+            if (Math.abs(diff) > 40) {
+              if (diff > 0) nextPopup();
+              else prevPopup();
+            }
+          }}
+        >
+          <button
+            className="close-popup"
+            onClick={closePopup}
+            aria-label="Close"
+          >
+            <i className="fas fa-times"></i>
           </button>
+
+          {popupImages.length > 1 && (
+            <div className="popup-counter">
+              {popupIndex + 1} / {popupImages.length}
+            </div>
+          )}
+
           {currentPopup && (
             <img
               id="popupImage"
               src={currentPopup.src}
               alt={currentPopup.alt}
+              className={popupFading ? "popup-img-fade" : ""}
             />
           )}
+
           {popupImages.length > 1 && (
             <div className="popup-nav">
-              <button className="popup-nav-btn" onClick={prevPopup}>
-                &#10094;
+              <button
+                className="popup-nav-btn popup-nav-prev"
+                onClick={prevPopup}
+                aria-label="Previous image"
+              >
+                <i className="fas fa-chevron-left"></i>
               </button>
-              <button className="popup-nav-btn" onClick={nextPopup}>
-                &#10095;
+              <button
+                className="popup-nav-btn popup-nav-next"
+                onClick={nextPopup}
+                aria-label="Next image"
+              >
+                <i className="fas fa-chevron-right"></i>
               </button>
+            </div>
+          )}
+
+          {popupImages.length > 1 && (
+            <div className="popup-thumbnails">
+              {popupImages.map((img, i) => (
+                <button
+                  key={i}
+                  className={`popup-thumb${i === popupIndex ? " active" : ""}`}
+                  onClick={() => changePopupIndex(i)}
+                  aria-label={`Go to image ${i + 1}`}
+                >
+                  <img src={img.src} alt={img.alt} />
+                </button>
+              ))}
             </div>
           )}
         </div>
