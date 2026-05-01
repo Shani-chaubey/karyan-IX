@@ -4,7 +4,7 @@ import BodyScrollUnlock from "./body-scroll-unlock";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Karyan IX",
+  title: "Karyan Nine",
   description:
     "Iconic Luxury Studio Tower opposite to Wave City on the Delhi-Meerut Expressway.",
   verification: {

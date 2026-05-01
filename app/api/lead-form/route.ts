@@ -40,7 +40,7 @@ async function sendToLeadAPI(
       "https://helptrip.me/WebService/Lead.asmx/InsertLead",
       new URLSearchParams({
         Name: name,
-        ProjectName: "karyan IX",
+        ProjectName: "Karyan Nine",
         City: "Gzb",
         Location: "NCR",
         Remark: `Lead from ${formType}`,
@@ -90,10 +90,10 @@ export async function POST(request: NextRequest) {
     await sendToLeadAPI(name, email, mobile, formType);
 
     const adminHtml = `
-      <h2>New Property Inquiry - Karyan IX</h2>
+      <h2>New Property Inquiry - Karyan Nine</h2>
       <p>Hi Team</p>
       <p>A new lead has been submitted on the landing page. Here are the details:</p>
-      <p><strong>Project Name:</strong> Karyan IX</p>
+      <p><strong>Project Name:</strong> Karyan Nine</p>
       <p><strong>Form / Button:</strong> ${escapeHtml(formType)}</p>
       <p><strong>Name:</strong> ${escapeHtml(name)}</p>
       <p><strong>Mobile:</strong> ${escapeHtml(mobile)}</p>
@@ -103,12 +103,12 @@ export async function POST(request: NextRequest) {
     await sendEmail(
       adminRecipientsForFormType(formType),
       adminHtml,
-      "New Lead From - Karyan IX",
+      "New Lead From - Karyan Nine",
     );
 
     const userHtml = `
       <p>Dear ${escapeHtml(name)},</p>
-      <p>Thank you for reaching out to us regarding the "Karyan IX" project. We truly appreciate your interest.</p>
+      <p>Thank you for reaching out to us regarding the "Karyan Nine" project. We truly appreciate your interest.</p>
       <p>Our team is excited to assist you and we'll be in touch with you soon to discuss your requirements and provide further details about the project.</p>
       <p>If you have any immediate questions or need additional information, please feel free to contact us.</p>
       <p><strong>Karyan Infratech Group</strong></p>
@@ -116,7 +116,7 @@ export async function POST(request: NextRequest) {
     await sendEmail(
       email,
       userHtml,
-      "Thank You for Your Interest in - Karyan IX",
+      "Thank You for Your Interest in - Karyan Nine",
     );
 
     return NextResponse.json({ success: true, redirect: "/thank-you" });

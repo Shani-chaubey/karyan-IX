@@ -11,18 +11,18 @@ const SLIDES = [
 ];
 
 const GALLERY_IMAGES = [
-  { src: "/studio-img/1S.jpeg", alt: "Karyan IX" },
-  { src: "/studio-img/2S.jpeg", alt: "Karyan IX" },
-  { src: "/studio-img/3S.jpeg", alt: "Karyan IX" },
-  { src: "/studio-img/4S.jpeg", alt: "Karyan IX" },
-  { src: "/studio-img/7S.jpeg", alt: "Karyan IX" },
-  { src: "/studio-img/8S.jpeg", alt: "Karyan IX" },
-  { src: "/studio-img/12S.jpeg", alt: "Karyan IX" },
-  { src: "/studio-img/13S.jpeg", alt: "Karyan IX" },
-  { src: "/studio-img/9S.jpeg", alt: "Karyan IX" },
-  { src: "/studio-img/14S.jpeg", alt: "Karyan IX" },
-  { src: "/images/img-1.jpeg", alt: "Karyan IX" },
-  { src: "/images/img-2.jpeg", alt: "Karyan IX" },
+  { src: "/studio-img/1S.jpeg", alt: "Karyan Nine" },
+  { src: "/studio-img/2S.jpeg", alt: "Karyan Nine" },
+  { src: "/studio-img/3S.jpeg", alt: "Karyan Nine" },
+  { src: "/studio-img/4S.jpeg", alt: "Karyan Nine" },
+  { src: "/studio-img/7S.jpeg", alt: "Karyan Nine" },
+  { src: "/studio-img/8S.jpeg", alt: "Karyan Nine" },
+  { src: "/studio-img/12S.jpeg", alt: "Karyan Nine" },
+  { src: "/studio-img/13S.jpeg", alt: "Karyan Nine" },
+  { src: "/studio-img/9S.jpeg", alt: "Karyan Nine" },
+  { src: "/studio-img/14S.jpeg", alt: "Karyan Nine" },
+  { src: "/images/img-1.jpeg", alt: "Karyan Nine" },
+  { src: "/images/img-2.jpeg", alt: "Karyan Nine" },
 ];
 
 const TITLE_MAP: Record<string, string> = {
@@ -277,7 +277,7 @@ export default function Home() {
       <header className="header">
         <nav className="nav-container">
           <div className="logo">
-            <img src="/images/logo.png" alt="Karyan IX" />
+            <img src="/images/logo.png" alt="Karyan Nine" />
           </div>
           <ul className={`nav-links${menuOpen ? " active" : ""}`}>
             <li>
@@ -343,13 +343,11 @@ export default function Home() {
                   </div>
                   <img
                     src={slide.src}
-                    alt="Karyan IX"
+                    alt="Karyan Nine"
                     className={slide.mirror ? "banner-image-mirror" : ""}
                   />
                   <div className="banner-info">
-                    <div className="info-badge">
-                      <i className="fas fa-star"></i> Karyan IX
-                    </div>
+                    <div className="info-badge">Karyan Nine</div>
                     <h1>Iconic Luxury Studio Tower opposite to Wave City</h1>
                     <p className="banner-expressway-line">
                       <i className="fas fa-road"></i>Bang On the Delhi-Meerut
@@ -440,7 +438,7 @@ export default function Home() {
               <div className="overview-content">
                 <div className="overview-text">
                   <p className="section-subtitle">
-                    Karyan IX is a premium studio tower designed for modern
+                    Karyan Nine is a premium studio tower designed for modern
                     investors, business owners and future-focused buyers.
                     Located right on Delhi-Meerut Expressway and opposite to
                     Wave City, this project offers strong visibility, easy
@@ -508,7 +506,7 @@ export default function Home() {
           <section id="price" className="highlights-section">
             <div className="section-container">
               <span className="section-tag">
-                <i className="fas fa-star"></i> Why Karyan IX
+                <i className="fas fa-star"></i> Why Karyan Nine
               </span>
               <h2 className="section-title">Project Highlights</h2>
               <div className="highlights-grid">
@@ -690,7 +688,7 @@ export default function Home() {
                   <span className="section-tag">
                     <i className="fas fa-chart-line"></i> Investment Potential
                   </span>
-                  <h2 className="section-title">Why Choose Karyan IX</h2>
+                  <h2 className="section-title">Why Choose Karyan Nine</h2>
                   <p>
                     This project is built at one of the fastest growing
                     locations of Ghaziabad. With direct highway access, nearby
@@ -749,7 +747,7 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="why-invest-img">
-                  <img src="/studio-img/1S.jpeg" alt="Karyan IX" />
+                  <img src="/studio-img/1S.jpeg" alt="Karyan Nine" />
                 </div>
               </div>
             </div>
@@ -791,7 +789,7 @@ export default function Home() {
                 </a>
               </div>
               <p className="cta-tagline">
-                Karyan IX — Premium Studio Landmark on Delhi-Meerut Expressway
+                Karyan Nine — Premium Studio Landmark on Delhi-Meerut Expressway
               </p>
               <div className="blur-placeholder" style={{ marginTop: "3rem" }}>
                 <img
@@ -908,7 +906,7 @@ export default function Home() {
                   <i className="fas fa-map-marker-alt"></i> Address
                 </span>
                 <span className="value">
-                  Karyan IX, Delhi Meerut Expressway, Ghaziabad
+                  Karyan Nine, Delhi Meerut Expressway, Ghaziabad
                 </span>
               </div>
               <div className="contact-item">
