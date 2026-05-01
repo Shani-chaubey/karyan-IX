@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import BodyScrollUnlock from "./body-scroll-unlock";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -46,6 +47,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             style={{ display: "none", visibility: "hidden" }}
           />
         </noscript>
+        <BodyScrollUnlock />
         {children}
       </body>
     </html>

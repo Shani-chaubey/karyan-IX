@@ -85,7 +85,7 @@ export default function Home() {
   };
   const closeModal = () => {
     setModalOpen(false);
-    document.body.style.overflow = "auto";
+    document.body.style.overflow = "";
   };
 
   /* ─ Gallery popup ─ */
@@ -101,7 +101,7 @@ export default function Home() {
   };
   const closePopup = () => {
     setPopupOpen(false);
-    document.body.style.overflow = "auto";
+    document.body.style.overflow = "";
   };
   const nextPopup = () =>
     setPopupIndex((p) => (p + 1) % popupImages.length);
@@ -146,6 +146,8 @@ export default function Home() {
       const data = await res.json();
       if (res.ok && data.success) {
         form.reset();
+        setSubmitOverlay(null);
+        document.body.style.overflow = "";
         router.push("/thank-you");
       } else {
         alert(data.message || "Server error. Please try again.");
@@ -154,6 +156,7 @@ export default function Home() {
       alert("Network error. Please try again.");
     } finally {
       setSubmitOverlay(null);
+      document.body.style.overflow = "";
     }
   };
 
@@ -179,6 +182,8 @@ export default function Home() {
       if (res.ok && data.success) {
         form.reset();
         closeModal();
+        setSubmitOverlay(null);
+        document.body.style.overflow = "";
         if (src === "brochure") {
           const link = document.createElement("a");
           link.href = "/images/kcB.pdf";
@@ -197,6 +202,7 @@ export default function Home() {
       alert("Network error. Please try again.");
     } finally {
       setSubmitOverlay(null);
+      document.body.style.overflow = "";
       setFormSubmitSource("");
     }
   };
@@ -207,9 +213,15 @@ export default function Home() {
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
-      document.body.style.overflow = prev;
+      document.body.style.overflow = prev || "";
     };
   }, [submitOverlay]);
+
+  useEffect(() => {
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
