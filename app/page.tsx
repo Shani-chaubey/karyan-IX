@@ -352,7 +352,7 @@ export default function Home() {
                     </div>
                     <h1>Iconic Luxury Studio Tower opposite to Wave City</h1>
                     <p className="banner-expressway-line">
-                      <i className="fas fa-road"></i> On the Delhi-Meerut
+                      <i className="fas fa-road"></i>Bang On the Delhi-Meerut
                       Expressway
                     </p>
                     <p className="location">
@@ -475,7 +475,7 @@ export default function Home() {
                     <div>
                       <div className="stat-label">Location</div>
                       <div className="stat-number">
-                        Right on the Delhi-Meerut Expressway
+                        Bang on Delhi-Meerut Expressway
                       </div>
                     </div>
                   </div>
