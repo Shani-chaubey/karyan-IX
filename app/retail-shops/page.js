@@ -371,10 +371,10 @@ export default function Home() {
                       <i className="fas fa-road"></i>
                       Opposite Wave City | Smart Investment
                     </p>
-                    <p className="location">
+                    {/* <p className="location">
                       <i className="fas fa-store"></i> 57 shops across
                       3 floors, multipurpose halls, and top-brand pre-leases.
-                    </p>
+                    </p> */}
                     <div className="key-features">
                       <div className="feature">
                         <i className="fas fa-store feature-icon-fa"></i>
