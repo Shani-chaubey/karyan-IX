@@ -889,7 +889,7 @@ export default function Home() {
       </div>
 
       {/* ─ FOOTER ─ */}
-      <footer id="contact" className="footer-section">
+      <footer className="footer-section">
         <div className="section-container">
           <div className="about-karyan-group">
             <h2 className="contact-title">About Karyan Group</h2>
@@ -915,7 +915,7 @@ export default function Home() {
             </p>
           </div>
           <br />
-          <div className="contact-details">
+          <div id="contact" className="contact-details" tabIndex={-1}>
             <h2 className="contact-title">CONTACT DETAILS</h2>
             <div className="contact-info">
               <div className="contact-item">
