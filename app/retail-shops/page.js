@@ -313,7 +313,7 @@ export default function Home() {
               <a href="#virtual-tour">Why Invest</a>
             </li>
             <li>
-              <a href="#location">Contact</a>
+              <a href="#contact">Contact</a>
             </li>
             <li>
               <button
@@ -820,23 +820,13 @@ export default function Home() {
           </section>
 
           {/* ── CTA ── */}
-          <section id="location" className="cta-section">
+          <section id="cta" className="cta-section">
             <div className="section-container">
               <h2 className="section-title center">
                 Book Your Studio Space on the Delhi-Meerut Expressway, opposite
                 to Wave City
               </h2>
-              <p className="cta-subtitle">
-                <span style={{ display: "block" }}>
-                  <span className="prelaunch-highlight">
-                    Get Pre-Launch Benefit for 50 Units
-                  </span>
-                </span>
-                <span style={{ display: "block" }}>
-                  Connect with our team today for pricing, floor plan and site
-                  visit.
-                </span>
-              </p>
+             
               <div className="cta-buttons">
                 <button
                   className="btn-white"
@@ -924,16 +914,13 @@ export default function Home() {
                 <i className="fas fa-paper-plane"></i> {LEAD_BUTTON_LABEL}
               </button>
             </form>
-            <p className="prelaunch-pill">
-              <i className="fas fa-gift"></i>
-              Get Pre-Launch Benefit for 50 Units
-            </p>
+            
           </div>
         </aside>
       </div>
 
       {/* ─ FOOTER ─ */}
-      <footer className="footer-section">
+      <footer id="contact" className="footer-section">
         <div className="section-container">
           <div className="about-karyan-group">
             <h2 className="contact-title">About Karyan Group</h2>

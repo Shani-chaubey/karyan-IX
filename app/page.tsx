@@ -311,7 +311,7 @@ export default function Home() {
               <a href="#virtual-tour">Why Invest</a>
             </li>
             <li>
-              <a href="#location">Contact</a>
+              <a href="#contact">Contact</a>
             </li>
             <li>
               <button
@@ -776,7 +776,7 @@ export default function Home() {
           </section>
 
           {/* ── CTA ── */}
-          <section id="location" className="cta-section">
+          <section id="cta" className="cta-section">
             <div className="section-container">
               <h2 className="section-title center">
                 Book Your Studio Space on the Delhi-Meerut Expressway, opposite
@@ -889,7 +889,7 @@ export default function Home() {
       </div>
 
       {/* ─ FOOTER ─ */}
-      <footer className="footer-section">
+      <footer id="contact" className="footer-section">
         <div className="section-container">
           <div className="about-karyan-group">
             <h2 className="contact-title">About Karyan Group</h2>

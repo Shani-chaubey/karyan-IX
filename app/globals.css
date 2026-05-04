@@ -32,6 +32,10 @@ html {
   scroll-behavior: smooth;
 }
 
+#contact {
+  scroll-margin-top: 88px;
+}
+
 body {
   font-family: "Poppins", sans-serif;
   color: var(--text-dark);
