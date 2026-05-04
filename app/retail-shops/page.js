@@ -1,0 +1,1165 @@
+"use client";
+
+import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
+
+const SLIDES = [
+  { src: "/studio-img/1S.jpeg", mirror: true },
+  { src: "/studio-img/2S.jpeg", mirror: true },
+  { src: "/studio-img/3S.jpeg", mirror: false },
+  { src: "/studio-img/4S.jpeg", mirror: false },
+];
+
+const GALLERY_IMAGES = [
+  { src: "/studio-img/1S.jpeg", alt: "Karyan Nine" },
+  { src: "/studio-img/2S.jpeg", alt: "Karyan Nine" },
+  { src: "/studio-img/3S.jpeg", alt: "Karyan Nine" },
+  { src: "/images/shop_1.jpeg", alt: "Karyan Nine" },
+  { src: "/images/shop_2.jpeg", alt: "Karyan Nine" },
+  { src: "/images/shop_3.jpeg", alt: "Karyan Nine" },
+  { src: "/images/shop_4.jpeg", alt: "Karyan Nine" },
+  { src: "/images/shop_5.jpeg", alt: "Karyan Nine" },
+  { src: "/studio-img/4S.jpeg", alt: "Karyan Nine" },
+  { src: "/studio-img/7S.jpeg", alt: "Karyan Nine" },
+  { src: "/studio-img/8S.jpeg", alt: "Karyan Nine" },
+  { src: "/studio-img/14S.jpeg", alt: "Karyan Nine" },
+];
+
+const TITLE_MAP = {
+  brochure: "Download Brochure",
+  location: "Get Location",
+  "location-details": "Get Location Details",
+  "floor-plan": "Get Floor Plan",
+  "site-visit": "Book a free site visit",
+};
+
+export default function Home() {
+  const router = useRouter();
+
+  /* ─ Slider ─ */
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const autoPlayRef = useRef(null);
+  const touchStartX = useRef(0);
+
+  const startAutoPlay = () => {
+    if (autoPlayRef.current) clearInterval(autoPlayRef.current);
+    autoPlayRef.current = setInterval(() => {
+      setCurrentSlide((p) => (p + 1) % SLIDES.length);
+    }, 5000);
+  };
+
+  useEffect(() => {
+    startAutoPlay();
+    return () => {
+      if (autoPlayRef.current) clearInterval(autoPlayRef.current);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const nextSlide = () => {
+    setCurrentSlide((p) => (p + 1) % SLIDES.length);
+    startAutoPlay();
+  };
+  const prevSlide = () => {
+    setCurrentSlide((p) => (p - 1 + SLIDES.length) % SLIDES.length);
+    startAutoPlay();
+  };
+
+  /* ─ Mobile menu ─ */
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  /* ─ About section read more ─ */
+  const [aboutExpanded, setAboutExpanded] = useState(false);
+
+  /* ─ Modal ─ */
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalTitle, setModalTitle] = useState("Download Brochure");
+  const [modalSubmitLabel, setModalSubmitLabel] = useState("Submit");
+  const [formSubmitSource, setFormSubmitSource] = useState("");
+
+  const openModal = (source, submitLabel) => {
+    setFormSubmitSource(source);
+    setModalTitle(TITLE_MAP[source] || "Book a free site visit");
+    setModalSubmitLabel(
+      submitLabel ||
+        (source === "brochure" ? "Download Brochure" : "Book Site Visit"),
+    );
+    setModalOpen(true);
+    document.body.style.overflow = "hidden";
+  };
+  const closeModal = () => {
+    setModalOpen(false);
+    document.body.style.overflow = "";
+  };
+
+  /* ─ Gallery popup ─ */
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [popupImages, setPopupImages] = useState([]);
+  const [popupIndex, setPopupIndex] = useState(0);
+  const [popupFading, setPopupFading] = useState(false);
+  const popupTouchStartX = useRef(0);
+
+  const openPopup = (images, index) => {
+    setPopupImages(images);
+    setPopupIndex(index);
+    setPopupFading(false);
+    setPopupOpen(true);
+    document.body.style.overflow = "hidden";
+  };
+  const closePopup = () => {
+    setPopupOpen(false);
+    document.body.style.overflow = "";
+  };
+
+  const changePopupIndex = (next) => {
+    setPopupFading(true);
+    setTimeout(() => {
+      setPopupIndex(next);
+      setPopupFading(false);
+    }, 180);
+  };
+
+  const nextPopup = () =>
+    changePopupIndex((popupIndex + 1) % popupImages.length);
+  const prevPopup = () =>
+    changePopupIndex(
+      (popupIndex - 1 + popupImages.length) % popupImages.length,
+    );
+
+  useEffect(() => {
+    const onKey = (e) => {
+      if (!popupOpen) return;
+      if (e.key === "Escape") closePopup();
+      else if (e.key === "ArrowRight") nextPopup();
+      else if (e.key === "ArrowLeft") prevPopup();
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [popupOpen, popupIndex, popupImages]);
+
+  /* ─ Forms (single API + shared overlay) ─ */
+  const LEAD_BUTTON_LABEL = "Book Site Visit";
+  const [submitOverlay, setSubmitOverlay] = useState(null);
+
+  const handleLeadSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitOverlay({
+      title: "Sending your details",
+      subtitle: `${LEAD_BUTTON_LABEL} · securing your request`,
+    });
+    const form = e.currentTarget;
+    const params = new URLSearchParams();
+    new FormData(form).forEach((v, k) => params.append(k, v.toString()));
+    params.set("formType", LEAD_BUTTON_LABEL);
+    try {
+      const res = await fetch("/api/lead-form", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: params.toString(),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        form.reset();
+        setSubmitOverlay(null);
+        document.body.style.overflow = "";
+        router.push("/thank-you");
+      } else {
+        alert(data.message || "Server error. Please try again.");
+      }
+    } catch {
+      alert("Network error. Please try again.");
+    } finally {
+      setSubmitOverlay(null);
+      document.body.style.overflow = "";
+    }
+  };
+
+  const handleModalSubmit = async (e) => {
+    e.preventDefault();
+    const label = modalSubmitLabel;
+    const src = formSubmitSource;
+    setSubmitOverlay({
+      title: "Sending your details",
+      subtitle: `${label} · we’re on it`,
+    });
+    const form = e.currentTarget;
+    const params = new URLSearchParams();
+    new FormData(form).forEach((v, k) => params.append(k, v.toString()));
+    params.set("formType", label);
+    try {
+      const res = await fetch("/api/lead-form", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: params.toString(),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        form.reset();
+        closeModal();
+        setSubmitOverlay(null);
+        document.body.style.overflow = "";
+        if (src === "brochure") {
+          const link = document.createElement("a");
+          link.href = "/images/Trevana.pdf";
+          link.download = "Trevana_Brochure.pdf";
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          setTimeout(() => router.push("/thank-you"), 500);
+        } else {
+          router.push("/thank-you");
+        }
+      } else {
+        alert(data.message || "Server error. Please try again.");
+      }
+    } catch {
+      alert("Network error. Please try again.");
+    } finally {
+      setSubmitOverlay(null);
+      document.body.style.overflow = "";
+      setFormSubmitSource("");
+    }
+  };
+
+  /* ─ Intersection Observer animations ─ */
+  useEffect(() => {
+    if (!submitOverlay) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev || "";
+    };
+  }, [submitOverlay]);
+
+  useEffect(() => {
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            if (entry.target instanceof HTMLElement) {
+              entry.target.style.opacity = "1";
+            }
+            entry.target.classList.add("animate-fadeInUp");
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: "0px 0px -50px 0px" },
+    );
+    document
+      .querySelectorAll(
+        ".section-title, .price-card, .gallery-item, .stat-item, .contact-item",
+      )
+      .forEach((el) => {
+        if (el instanceof HTMLElement) {
+          el.style.opacity = "0";
+          observer.observe(el);
+        }
+      });
+    return () => observer.disconnect();
+  }, []);
+
+  const currentPopup = popupImages[popupIndex];
+
+  return (
+    <>
+      {submitOverlay && (
+        <div
+          className="form-submit-overlay"
+          role="status"
+          aria-live="polite"
+          aria-busy="true"
+        >
+          <div className="form-submit-backdrop" />
+          <div className="form-submit-card">
+            <div className="form-submit-spinner" aria-hidden>
+              <span className="form-submit-ring" />
+            </div>
+            <p className="form-submit-title">{submitOverlay.title}</p>
+            <p className="form-submit-sub">{submitOverlay.subtitle}</p>
+            <div className="form-submit-progress" aria-hidden>
+              <div className="form-submit-progress-bar" />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ─ HEADER ─ */}
+      <header className="header">
+        <nav className="nav-container">
+          <div className="logo">
+            <img src="/images/logo.png" alt="Karyan Nine" />
+          </div>
+          <ul className={`nav-links${menuOpen ? " active" : ""}`}>
+            <li>
+              <a href="#price">Highlights</a>
+            </li>
+            <li>
+              <a href="#location">Location</a>
+            </li>
+            <li>
+              <a href="#floor-plan">Floor Plan</a>
+            </li>
+            <li>
+              <a href="#gallery">Gallery</a>
+            </li>
+            <li>
+              <a href="#virtual-tour">Why Invest</a>
+            </li>
+            <li>
+              <a href="#location">Contact</a>
+            </li>
+            <li>
+              <button
+                className="btn-download-brochure"
+                onClick={() => openModal("brochure", "Download Brochure")}
+              >
+                Download Brochure
+              </button>
+            </li>
+          </ul>
+          <button
+            className="menu-btn"
+            onClick={() => setMenuOpen((o) => !o)}
+            aria-label="Toggle menu"
+            style={{ background: "none", border: "none" }}
+          >
+            <span />
+            <span />
+            <span />
+          </button>
+        </nav>
+      </header>
+
+      <div className="main-container">
+        {/* ─ MAIN CONTENT ─ */}
+        <main className="main-content">
+          {/* ── HERO ── */}
+          <section className="banner">
+            <div
+              className="slider"
+              onTouchStart={(e) => {
+                touchStartX.current = e.changedTouches[0].screenX;
+              }}
+              onTouchEnd={(e) => {
+                const diff = touchStartX.current - e.changedTouches[0].screenX;
+                if (Math.abs(diff) > 50) diff > 0 ? nextSlide() : prevSlide();
+              }}
+            >
+              {SLIDES.map((slide, i) => (
+                <div
+                  key={i}
+                  className={`slide${currentSlide === i ? " active" : ""}`}
+                >
+                  <img
+                    src={slide.src}
+                    alt="Karyan Nine"
+                    className={slide.mirror ? "banner-image-mirror" : ""}
+                  />
+                  <div className="banner-info">
+                    <div className="info-badge">Karyan Nine</div>
+                    <h1>
+                      Pre-Leased Retail Shops 
+                    </h1>
+                    <p className="banner-expressway-line">
+                      <i className="fas fa-road"></i>
+                      Bang on Delhi-Meerut Expressway |
+                      Opposite Wave City 
+                    </p>
+                    <p className="location">
+                      <i className="fas fa-store"></i> 57 shops across
+                      3 floors, multipurpose halls, and top-brand pre-leases.
+                    </p>
+                    <div className="key-features">
+                      <div className="feature">
+                        <i className="fas fa-store feature-icon-fa"></i>
+                        <span className="feature-label">Shops</span>
+                        <span className="feature-value">Total 57 Shops</span>
+                      </div>
+                      <div className="feature">
+                        <i className="fas fa-layer-group feature-icon-fa"></i>
+                        <span className="feature-label">Floors</span>
+                        <span className="feature-value">3 Floors</span>
+                      </div>
+                      <div className="feature">
+                        <i className="fas fa-users feature-icon-fa"></i>
+                        <span className="feature-label">Halls</span>
+                        <span className="feature-value">
+                          4 Multipurpose Hall
+                        </span>
+                      </div>
+                      <div className="feature">
+                        <i className="fas fa-handshake feature-icon-fa"></i>
+                        <span className="feature-label">Tenancy</span>
+                        <span className="feature-value">
+                          Pre-Leased Shops with Top Brands
+                        </span>
+                      </div>
+                    </div>
+                    <p className="banner-price-heading">
+                      <span className="banner-price-label">Investment</span>
+                      <span className="banner-price-main">
+                        ₹1.50 Cr – ₹4 Cr<sup>*</sup>
+                        <span className="banner-price-onwards">
+                          Based on size
+                        </span>
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              ))}
+
+              <button
+                className="slider-btn prev"
+                onClick={prevSlide}
+                aria-label="Previous slide"
+              >
+                <i className="fas fa-chevron-left"></i>
+              </button>
+              <button
+                className="slider-btn next"
+                onClick={nextSlide}
+                aria-label="Next slide"
+              >
+                <i className="fas fa-chevron-right"></i>
+              </button>
+
+              <div className="slider-dots">
+                {SLIDES.map((_, i) => (
+                  <span
+                    key={i}
+                    className={`dot${currentSlide === i ? " active" : ""}`}
+                    onClick={() => {
+                      setCurrentSlide(i);
+                      startAutoPlay();
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* ── ABOUT ── */}
+          <section className="overview">
+            <div className="section-container">
+              <span className="section-tag">
+                <i className="fas fa-info-circle"></i> About the Project
+              </span>
+              <h2 className="section-title">
+                Premium Society Shops on Delhi-Meerut Expressway 
+              </h2>
+              <div className="overview-content">
+                <div className="overview-text">
+                  <p className="section-subtitle">
+                    Strategically located opposite Wave City, Karyan Nine offers
+                    premium pre-leased retail shops designed for investors and
+                    business owners looking for stable returns.
+                  </p>
+                  <p className="overview-para">
+                    Positioned right on the Delhi-Meerut Expressway, the project
+                    ensures high visibility, smooth access, and strong daily
+                    footfall. With a thoughtfully planned 3-floor retail zone,
+                    limited inventory, and efficient layout, every shop is
+                    designed to maximize frontage and rental value.
+                  </p>
+                  {!aboutExpanded && (
+                    <button
+                      type="button"
+                      className="btn-read-more-about"
+                      aria-expanded={false}
+                      aria-controls="about-expand-panel"
+                      onClick={() => setAboutExpanded(true)}
+                    >
+                      Read more
+                      <i className="fas fa-chevron-down" aria-hidden />
+                    </button>
+                  )}
+                  <div
+                    id="about-expand-panel"
+                    className={`about-expand-panel${aboutExpanded ? " is-expanded" : ""}`}
+                    aria-hidden={!aboutExpanded}
+                  >
+                    <div className="about-expand-inner">
+                      <p className="overview-para">
+                        The project features Pre-Leased Shops with Top Brands,
+                        making it a strong investment option for consistent rental
+                        income.
+                      </p>
+                      <p className="overview-para">
+                        Surrounded by highway-facing society shops, the location
+                        already has an active customer base. Additionally, two
+                        societies (including studio apartments) cater directly to
+                        this retail zone, with 1000+ families already residing
+                        nearby, ensuring continuous daily footfall.
+                      </p>
+                      <p className="overview-para">
+                        Features like 3 kiosks, direct entry access, and a
+                        well-connected layout further enhance business potential.
+                      </p>
+                    </div>
+                  </div>
+                  {aboutExpanded && (
+                    <button
+                      type="button"
+                      className="btn-read-more-about btn-read-more-about-less"
+                      aria-expanded
+                      aria-controls="about-expand-panel"
+                      onClick={() => setAboutExpanded(false)}
+                    >
+                      Read less
+                      <i className="fas fa-chevron-up" aria-hidden />
+                    </button>
+                  )}
+                  <div className="about-cta-row">
+                    <button
+                      className="btn-primary"
+                      onClick={() => openModal("site-visit", "Enquire Now")}
+                    >
+                      <i className="fas fa-paper-plane"></i> Enquire Now
+                    </button>
+                  </div>
+                </div>
+                <div className="overview-stats">
+                  <div className="stat-item">
+                    <div className="stat-icon-wrap">
+                      <i className="fas fa-road"></i>
+                    </div>
+                    <div>
+                      <div className="stat-label">Location</div>
+                      <div className="stat-number">
+                        Bang on Delhi-Meerut Expressway
+                      </div>
+                    </div>
+                  </div>
+                  <div className="stat-item">
+                    <div className="stat-icon-wrap">
+                      <i className="fas fa-gem"></i>
+                    </div>
+                    <div>
+                      <div className="stat-label">Exclusivity</div>
+                      <div className="stat-number">
+                        Pre-Leased Shops 
+                      </div>
+                    </div>
+                  </div>
+                  <div className="stat-item">
+                    <div className="stat-icon-wrap">
+                      <i className="fas fa-city"></i>
+                    </div>
+                    <div>
+                      <div className="stat-label">Neighbours</div>
+                      <div className="stat-number">opposite to Wave City</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* ── HIGHLIGHTS ── */}
+          <section id="price" className="highlights-section">
+            <div className="section-container">
+              <span className="section-tag">
+                <i className="fas fa-star"></i> Project Highlights
+              </span>
+              <h2 className="section-title">
+                Expressway Facing Society Shops
+              </h2>
+              <div className="highlights-grid">
+                {[
+                  { icon: "fa-users", text: "1000+ Families Nearby" },
+                  { icon: "fa-route", text: "Great Connectivity" },
+                  { icon: "fa-square-parking", text: "Multilevel Car Parking" },
+                  { icon: "fa-arrows-left-right", text: "Wide Corridor" },
+                  { icon: "fa-elevator", text: "Dedicated Lifts & Escalator" },
+                  { icon: "fa-door-open", text: "Direct Entry Access" },
+                  {
+                    icon: "fa-border-all",
+                    text: "Iconic Modern Facade Elevation",
+                  },
+                  { icon: "fa-leaf", text: "Lush Green Landscaping" },
+                  { icon: "fa-shield-halved", text: "Advanced Security" },
+                  { icon: "fa-bolt", text: "24x7 Power Backup" },
+                ].map((item) => (
+                  <div className="highlight-card" key={item.text}>
+                    <div className="highlight-icon">
+                      <i className={`fas ${item.icon}`}></i>
+                    </div>
+                    <span className="highlight-text">{item.text}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* ── LOCATION ── */}
+          <section id="location" className="location-benefits">
+            <div className="section-container">
+              <span className="section-tag">
+                <i className="fas fa-map-marker-alt"></i> Location Advantage
+              </span>
+              <h2 className="section-title">Prime Location Benefits</h2>
+              <div className="location-benefits-inner">
+                <div>
+                  <ul className="loc-list">
+                    <li>
+                      <i className="fas fa-road"></i>Nearby Ganga Expressway
+                      &amp; Eastern Peripheral Expressway
+                    </li>
+                    <li>
+                      <i className="fas fa-city"></i>Just opposite to Wave City
+                    </li>
+                    <li>
+                      <i className="fas fa-hospital"></i>Manipal Hospital – 1.5
+                      KM
+                    </li>
+                    <li>
+                      <i className="fas fa-hospital-alt"></i>Metro Station ~ 15
+                      Minutes
+                    </li>
+                    <li>
+                      <i className="fas fa-graduation-cap"></i>IMS College – 10
+                      Minutes
+                    </li>
+                    <li>
+                      <i className="fas fa-graduation-cap"></i>ABES College – 5
+                      Minutes
+                    </li>
+                    <li>
+                      <i className="fas fa-store"></i>Near Expo Center
+                    </li>
+                    <li>
+                      <i className="fas fa-network-wired"></i>Easy Connectivity
+                      to Noida, Delhi &amp; Ghaziabad
+                    </li>
+                  </ul>
+                </div>
+                <div className="location-visual-pane">
+                  <div className="blur-placeholder">
+                    <img
+                      src="/studio-img/2S.jpeg"
+                      alt="Location Map"
+                      className="blur-image"
+                    />
+                  </div>
+                  <button
+                    className="btn-primary image-cta-below"
+                    onClick={() => openModal("location", "Enquire Now")}
+                  >
+                    <i className="fas fa-map-pin"></i> Enquire Now
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* ── AMENITIES ── */}
+          <section id="layout-plan" className="amenities-section">
+            <div className="section-container">
+              <span className="section-tag">
+                <i className="fas fa-th-large"></i> Features &amp; Amenities
+              </span>
+              <h2 className="section-title">Modern Features</h2>
+              <div className="amenities-grid">
+                {[
+                  { icon: "fa-sort-amount-up-alt", name: "High-Speed Lifts" },
+                  { icon: "fa-bolt", name: "100% Power Backup" },
+                  { icon: "fa-video", name: "CCTV Surveillance" },
+                  { icon: "fa-car", name: "Ample Parking Space" },
+                  { icon: "fa-border-none", name: "Iconic Modern Facade" },
+                  {
+                    icon: "fa-door-open",
+                    name: "Grand Double-Height Entrance",
+                  },
+                  { icon: "fa-trophy", name: "Branded Commercial Ambience" },
+                ].map((a) => (
+                  <div className="amenity-card" key={a.name}>
+                    <div className="amenity-icon">
+                      <i className={`fas ${a.icon}`}></i>
+                    </div>
+                    <div className="amenity-name">{a.name}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* ── FLOOR PLAN ── */}
+          <section id="floor-plan" className="floor-plan-section">
+            <div className="section-container">
+              <span className="section-tag">
+                <i className="fas fa-vector-square"></i> Layout
+              </span>
+              <h2 className="section-title">Floor Plan</h2>
+              <p className="section-subtitle">
+                Explore the tower layout — request detailed drawings after your
+                enquiry.
+              </p>
+              <div className="blur-placeholder floor-plan-visual">
+                <img
+                  src="/studio-img/6S.jpeg"
+                  alt="Floor Plan"
+                  className="blur-image"
+                />
+              </div>
+              <button
+                className="btn-primary image-cta-below"
+                onClick={() => openModal("floor-plan", "Enquire Now")}
+              >
+                <i className="fas fa-file-alt"></i> Enquire Now
+              </button>
+            </div>
+          </section>
+
+          {/* ── GALLERY ── */}
+          <section id="gallery" className="gallery" style={{ paddingTop: "0" }}>
+            <div className="section-container">
+              <span className="section-tag">
+                <i className="fas fa-images"></i> Visual Tour
+              </span>
+              <h2 className="section-title">Project Gallery</h2>
+              <p className="section-subtitle" style={{ marginBottom: 0 }}>
+                Take a look inside Karyan 9 - premium studio spaces built for
+                strong rental demand &amp; future growth.
+              </p>
+              <div className="gallery-grid">
+                {GALLERY_IMAGES.map((img, i) => (
+                  <div
+                    className="gallery-item"
+                    key={i}
+                    onClick={() => openPopup(GALLERY_IMAGES, i)}
+                  >
+                    <img
+                      src={img.src}
+                      alt={img.alt}
+                      className="gallery-popup-img"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* ── WHY INVEST ── */}
+          <section id="virtual-tour" className="why-invest">
+            <div className="section-container">
+              <div className="why-invest-inner">
+                <div>
+                  <span className="section-tag">
+                    <i className="fas fa-chart-line"></i> Investment Potential
+                  </span>
+                  <h2 className="section-title">Why Choose Karyan Nine</h2>
+                  <p>
+                    This project is built at one of the fastest growing
+                    locations of Ghaziabad. Directly accessible from
+                    Delhi-Meerut Expressway, nearby hospitals, colleges and
+                    residential catchment, it gives strong business potential
+                    and future appreciation.
+                  </p>
+                  <p>
+                    Limited inventory and iconic frontage make it a smart
+                    investment option for the discerning buyer.
+                  </p>
+                  <div className="invest-points">
+                    <div className="invest-point">
+                      <div className="invest-point-icon">
+                        <i className="fas fa-route"></i>
+                      </div>
+                      <div>
+                        <strong>Connected to Everything</strong>
+                        <p>
+                          Smooth highway access to Noida, Delhi &amp; Ghaziabad
+                          — every important destination is minutes away.
+                        </p>
+                      </div>
+                    </div>
+                    <div className="invest-point">
+                      <div className="invest-point-icon">
+                        <i className="fas fa-hand-holding-usd"></i>
+                      </div>
+                      <div>
+                        <strong>High ROI Potential</strong>
+                        <p>
+                          Prime highway frontage + limited supply = strong
+                          appreciation and rental yield over time.
+                        </p>
+                      </div>
+                    </div>
+                    <div className="invest-point">
+                      <div className="invest-point-icon">
+                        <i className="fas fa-users"></i>
+                      </div>
+                      <div>
+                        <strong>Large Catchment Area</strong>
+                        <p>
+                          Hospitals, colleges, residential zones and tech parks
+                          all within 5–10 minutes radius.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div style={{ marginTop: "2rem" }}>
+                    <button
+                      className="btn-white"
+                      onClick={() => openModal("site-visit", "Enquire Now")}
+                    >
+                      <i className="fas fa-paper-plane"></i> Enquire Now
+                    </button>
+                  </div>
+                </div>
+                <div className="why-invest-img">
+                  <img src="/studio-img/1S.jpeg" alt="Karyan Nine" />
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* ── CTA ── */}
+          <section id="location" className="cta-section">
+            <div className="section-container">
+              <h2 className="section-title center">
+                Book Your Studio Space on the Delhi-Meerut Expressway, opposite
+                to Wave City
+              </h2>
+              <p className="cta-subtitle">
+                <span style={{ display: "block" }}>
+                  <span className="prelaunch-highlight">
+                    Get Pre-Launch Benefit for 50 Units
+                  </span>
+                </span>
+                <span style={{ display: "block" }}>
+                  Connect with our team today for pricing, floor plan and site
+                  visit.
+                </span>
+              </p>
+              <div className="cta-buttons">
+                <button
+                  className="btn-white"
+                  onClick={() => openModal("site-visit", "Enquire Now")}
+                >
+                  <i className="fas fa-paper-plane"></i> Enquire Now
+                </button>
+
+                <a className="btn-outline-white" href="tel:+919953298484">
+                  <i className="fas fa-phone-alt"></i> Call Now
+                </a>
+              </div>
+              <p className="cta-tagline">
+                Karyan Nine — Premium Studio Landmark on Delhi-Meerut Expressway
+              </p>
+              <div className="blur-placeholder" style={{ marginTop: "3rem" }}>
+                <img
+                  src="/images/location.jpeg"
+                  alt="Location"
+                  className="blur-image"
+                />
+              </div>
+              <button
+                className="btn-white image-cta-below"
+                onClick={() => openModal("location-details", "Enquire Now")}
+              >
+                <i className="fas fa-map-pin"></i> Enquire Now
+              </button>
+            </div>
+          </section>
+        </main>
+
+        {/* ─ LEAD FORM ─ */}
+        <aside className="lead-form">
+          <div className="form-container">
+            <div className="form-header-icon">
+              <i className="fas fa-building"></i>
+            </div>
+            <h2 className="anim">Book a Site Visit</h2>
+            <p className="anim2">
+              <i className="fas fa-phone-alt"></i> +91 995-329-8484
+            </p>
+            <form id="leadForm" onSubmit={handleLeadSubmit}>
+              <div className="form-icon-group">
+                <i className="fas fa-user"></i>
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Your Full Name"
+                  required
+                />
+              </div>
+              <div className="form-icon-group">
+                <i className="fas fa-mobile-alt"></i>
+                <input
+                  type="tel"
+                  name="mobile"
+                  placeholder="Mobile Number"
+                  required
+                  inputMode="numeric"
+                  minLength={10}
+                  maxLength={10}
+                  pattern="\d{10}"
+                  title="Enter exactly 10 digits"
+                  onInput={(e) => {
+                    const t = e.currentTarget;
+                    t.value = t.value.replace(/[^0-9]/g, "").slice(0, 10);
+                  }}
+                />
+              </div>
+              <div className="form-icon-group">
+                <i className="fas fa-envelope"></i>
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email Address"
+                  required
+                />
+              </div>
+              <button
+                type="submit"
+                className="btn-submit"
+                disabled={!!submitOverlay}
+              >
+                <i className="fas fa-paper-plane"></i> {LEAD_BUTTON_LABEL}
+              </button>
+            </form>
+            <p className="prelaunch-pill">
+              <i className="fas fa-gift"></i>
+              Get Pre-Launch Benefit for 50 Units
+            </p>
+          </div>
+        </aside>
+      </div>
+
+      {/* ─ FOOTER ─ */}
+      <footer className="footer-section">
+        <div className="section-container">
+          <div className="about-karyan-group">
+            <h2 className="contact-title">About Karyan Group</h2>
+            <p>
+              Karyan Group stands at the forefront of real estate development,
+              distinguished by its commitment to architectural excellence,
+              meticulous project execution, and strategic partnerships with
+              renowned entities.
+            </p>
+            <p>
+              With an unwavering dedication to innovation and sustainability,
+              the company consistently delivers developments that redefine
+              industry benchmarks. Guided by principles of integrity and
+              transparency, Karyan Group not only meets but surpasses
+              expectations, cultivating enduring trust and confidence among its
+              stakeholders.
+            </p>
+            <p>
+              Through visionary leadership and a steadfast pursuit of
+              excellence, the company continues to shape the future of real
+              estate, reinforcing its position as a trusted and forward-thinking
+              industry leader.
+            </p>
+          </div>
+          <br />
+          <div className="contact-details">
+            <h2 className="contact-title">CONTACT DETAILS</h2>
+            <div className="contact-info">
+              <div className="contact-item">
+                <span className="label">
+                  <i className="fas fa-map-marker-alt"></i> Address
+                </span>
+                <span className="value">
+                  Karyan Nine, Delhi Meerut Expressway, Ghaziabad
+                </span>
+              </div>
+              <div className="contact-item">
+                <span className="label">
+                  <i className="fas fa-phone-alt"></i> Phone
+                </span>
+                <a href="tel:+919953298484" className="value phone-link">
+                  +91 995-329-8484
+                </a>
+              </div>
+              <div className="contact-item">
+                <span className="label">
+                  <i className="fas fa-envelope"></i> Email
+                </span>
+                <a
+                  href="mailto:sales@karyaninfratech.co.in"
+                  className="value email-link"
+                >
+                  sales@karyaninfratech.co.in
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div className="disclaimer-section">
+            <p className="disclaimer-text">
+              For Photos, Layouts and Maps – The Pictures and details are
+              tentative depictions only. This is not a legal offer. Mentioned
+              features are indicative and are subject to change without any
+              prior notice as may be decided by the company or competent
+              authority Terms and Conditions Apply. Special Scheme by the
+              developer.1sq Mtr =10.764 Sq. Ft &amp; 1sq. Yd. = 9 Sq. feet. This
+              is not the official website of developer &amp; property, it
+              belongs to authorised channel partner for information purpose
+              only.
+            </p>
+          </div>
+          <div className="sys">
+            <p>Copyright 2026, all right reserved with Channel Partner.</p>
+          </div>
+        </div>
+
+        {/* Mobile Fixed Bottom Nav */}
+        <div className="mobile-bottom-nav">
+          <button
+            className="btn-brochure"
+            onClick={() => openModal("site-visit", "Book a free site visit")}
+          >
+            Book a free site visit
+          </button>
+        </div>
+      </footer>
+
+      {/* ─ MODAL ─ */}
+      <div
+        className={`modal${modalOpen ? " open" : ""}`}
+        onClick={(e) => {
+          if (e.target === e.currentTarget) closeModal();
+        }}
+      >
+        <div className="modal-content">
+          <button className="close-modal" onClick={closeModal}>
+            &times;
+          </button>
+          <h2>{modalTitle}</h2>
+          <form className="modal-form" onSubmit={handleModalSubmit}>
+            <div className="form-icon-group">
+              <i className="fas fa-user"></i>
+              <input
+                type="text"
+                name="name"
+                placeholder="Your Full Name"
+                required
+              />
+            </div>
+            <div className="form-icon-group">
+              <i className="fas fa-envelope"></i>
+              <input
+                type="email"
+                name="email"
+                placeholder="Email Address"
+                required
+              />
+            </div>
+            <div className="form-icon-group">
+              <i className="fas fa-mobile-alt"></i>
+              <input
+                type="tel"
+                name="phone"
+                placeholder="Phone Number"
+                required
+                inputMode="numeric"
+                minLength={10}
+                maxLength={10}
+                pattern="\d{10}"
+                title="Enter exactly 10 digits"
+                onInput={(e) => {
+                  const t = e.currentTarget;
+                  t.value = t.value.replace(/[^0-9]/g, "").slice(0, 10);
+                }}
+              />
+            </div>
+            <button
+              type="submit"
+              className="btn-submit"
+              disabled={!!submitOverlay}
+            >
+              <i className="fas fa-paper-plane"></i> {modalSubmitLabel}
+            </button>
+          </form>
+        </div>
+      </div>
+
+      {/* ─ IMAGE POPUP ─ */}
+      <div
+        className={`image-popup${popupOpen ? " open" : ""}`}
+        onClick={(e) => {
+          if (e.target === e.currentTarget) closePopup();
+        }}
+      >
+        <div
+          className="popup-content"
+          onTouchStart={(e) => {
+            popupTouchStartX.current = e.changedTouches[0].screenX;
+          }}
+          onTouchEnd={(e) => {
+            const diff = popupTouchStartX.current - e.changedTouches[0].screenX;
+            if (Math.abs(diff) > 40) {
+              if (diff > 0) nextPopup();
+              else prevPopup();
+            }
+          }}
+        >
+          <button
+            className="close-popup"
+            onClick={closePopup}
+            aria-label="Close"
+          >
+            <i className="fas fa-times"></i>
+          </button>
+
+          {popupImages.length > 1 && (
+            <div className="popup-counter">
+              {popupIndex + 1} / {popupImages.length}
+            </div>
+          )}
+
+          {currentPopup && (
+            <img
+              id="popupImage"
+              src={currentPopup.src}
+              alt={currentPopup.alt}
+              className={popupFading ? "popup-img-fade" : ""}
+            />
+          )}
+
+          {popupImages.length > 1 && (
+            <div className="popup-nav">
+              <button
+                className="popup-nav-btn popup-nav-prev"
+                onClick={prevPopup}
+                aria-label="Previous image"
+              >
+                <i className="fas fa-chevron-left"></i>
+              </button>
+              <button
+                className="popup-nav-btn popup-nav-next"
+                onClick={nextPopup}
+                aria-label="Next image"
+              >
+                <i className="fas fa-chevron-right"></i>
+              </button>
+            </div>
+          )}
+
+          {popupImages.length > 1 && (
+            <div className="popup-thumbnails">
+              {popupImages.map((img, i) => (
+                <button
+                  key={i}
+                  className={`popup-thumb${i === popupIndex ? " active" : ""}`}
+                  onClick={() => changePopupIndex(i)}
+                  aria-label={`Go to image ${i + 1}`}
+                >
+                  <img src={img.src} alt={img.alt} />
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </>
+  );
+}

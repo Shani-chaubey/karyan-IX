@@ -409,6 +409,12 @@ body {
   align-items: start;
 }
 
+.overview-text {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
 .overview-text p {
   color: var(--text-mid);
   font-size: 1rem;
@@ -1645,6 +1651,104 @@ body {
   font-size: 0.98rem;
   line-height: 1.85;
 }
+.about-expand-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.45s ease;
+}
+.about-expand-panel.is-expanded {
+  grid-template-rows: 1fr;
+}
+.about-expand-inner {
+  overflow: hidden;
+  min-height: 0;
+}
+.about-expand-inner .overview-para:first-child {
+  margin-top: 0;
+}
+.btn-read-more-about {
+  align-self: flex-end;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.65rem;
+  margin-bottom: 0;
+  padding: 0.35rem 0 0.5rem;
+  background: none;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  font-family: "Playfair Display", serif;
+  font-size: 0.94rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold-dark);
+  transition: color 0.4s ease, letter-spacing 0.4s ease;
+  position: relative;
+}
+.btn-read-more-about::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--gold) 20%,
+    var(--gold-dark) 50%,
+    var(--gold) 80%,
+    transparent
+  );
+  opacity: 0.55;
+  transform: scaleX(0.35);
+  transform-origin: center;
+  transition: transform 0.45s ease, opacity 0.45s ease;
+}
+.btn-read-more-about:hover {
+  color: var(--navy);
+  letter-spacing: 0.18em;
+}
+.btn-read-more-about:hover::after {
+  transform: scaleX(1);
+  opacity: 1;
+}
+.btn-read-more-about:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 6px;
+  border-radius: 2px;
+  color: var(--navy);
+}
+.btn-read-more-about:focus-visible::after {
+  transform: scaleX(1);
+  opacity: 1;
+}
+.btn-read-more-about i {
+  font-size: 0.62rem;
+  color: var(--gold);
+  opacity: 0.95;
+  transition: transform 0.4s cubic-bezier(0.33, 1, 0.68, 1), color 0.35s ease;
+}
+.btn-read-more-about:hover i {
+  color: var(--gold-dark);
+}
+.btn-read-more-about:hover i.fa-chevron-down {
+  transform: translateY(4px);
+}
+.btn-read-more-about:hover i.fa-chevron-up {
+  transform: translateY(-4px);
+}
+.btn-read-more-about-less {
+  margin-top: 1.15rem;
+}
+@media (prefers-reduced-motion: reduce) {
+  .about-expand-panel {
+    transition-duration: 0.01ms;
+  }
+}
+
 .about-cta-row {
   display: flex;
   gap: 0.75rem;
