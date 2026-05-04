@@ -365,12 +365,11 @@ export default function Home() {
                   <div className="banner-info">
                     <div className="info-badge">Karyan Nine</div>
                     <h1>
-                      Pre-Leased Retail Shops 
+                      Pre-Leased Retail Shops on Delhi-Meerut Expressway
                     </h1>
                     <p className="banner-expressway-line">
                       <i className="fas fa-road"></i>
-                      Bang on Delhi-Meerut Expressway |
-                      Opposite Wave City 
+                      Opposite Wave City | Smart Investment
                     </p>
                     <p className="location">
                       <i className="fas fa-store"></i> 57 shops across
